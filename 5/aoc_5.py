@@ -3,6 +3,7 @@ import re
 key_dict, part1 = -2, 4288015284
 first_dict = {}
 seeds = []
+location, not_found_yet = False, True
 
 with open('input_2.txt') as f:
     lines = f.readlines()
@@ -10,29 +11,22 @@ with open('input_2.txt') as f:
         if re.search("seeds:", line):
             for num in line.split():
                 if num.isnumeric(): seeds.append(int(num))                  #prirazene seedy do pole seeds[]
-        else:
-            words = line.split()            #rozdeleni po mezerach
+
+    for seed in seeds:
+        cur_seed = seed
+        i = 0
+        for line in lines:
+            words = line.split()    
             
             if not words == [] and (re.search(":", words[1]) or re.search(":", words[0])):      #hledam prazdny radek a radek s dvojteckou
-                
-                if not first_dict == {}:        #kontrola jestli je first dict jiz zaplneny alespon prvni varkou
-                    new_seeds = seeds
-                    seeds = []
-                    
-                    for seed in new_seeds:          #prochazeni seminek 
-                        cur_seed = seed
-                        if cur_seed in first_dict:      #pokud je seminko ve slovniku -> zmenim ho na namapovane
-                            cur_seed = first_dict[cur_seed]
-                        seeds.append(cur_seed)          #do vycistenych seminek vkladam nove zjistene
-                
-                first_dict = {}         #vycisteni slovniku
-            
-            elif not words == [] and re.search("\d+", words[0]):        #hledam mapujici cisla a ukladam do slovniku
-                source = int(words[1])
-                dest = int(words[0])
-                for i in range(int(words[2])):
-                    first_dict[source] = dest
-                    source += 1
-                    dest += 1
-       
-print(min(seeds))
+                not_found_yet = True       
+            if not words == [] and re.search("\d+", words[0]):        
+                if cur_seed >= int(words[1]) and cur_seed < int(words[1]) + int(words[2]) and not_found_yet:
+                    cur_seed = cur_seed - int(words[1]) + int(words[0])
+                    not_found_yet = False
+            if cur_seed < part1 and i == len(lines) - 1:
+                part1 = cur_seed
+                location = False
+            i += 1
+        
+print("PART1:", part1)
