@@ -5,13 +5,14 @@ import multiprocessing
 def for_partition(shared_part1, seed, seed2, lines):
     global part1
     cur_seed_part2 = seed2
-
+    print("JSEM VE FCI PROCESU")
     for j in range(int(cur_seed_part2)):
+        #print("[" + str(j) + str(range(int(cur_seed_part2))) + "]")
         cur_seed = seed + j
         i = 0
         for line in lines:
             words = line.split()
-            
+
             if not words == [] and (re.search(":", words[1]) or re.search(":", words[0])):
                 not_found_yet = True
             if not words == [] and re.search("\d+", words[0]):
@@ -57,5 +58,6 @@ if __name__ == "__main__":
 
         for process in processes:
             process.join()
+            print("JOIN")
 
         print("PART1:", part1.value)
