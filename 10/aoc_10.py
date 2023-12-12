@@ -159,26 +159,18 @@ with open('input_0.txt') as f:
             pipe_cnt += 1
         
         pipe_border.append((starting_point[0], starting_point[1]))
-        print(cur_pipe, starting_point[0], starting_point[1])
 
     for row in range(len(lines)):
         for col in range(len(lines[0]) - 1):
-            print(row, col)
-            if (row, col) in pipe_border:
-                print("xd")
-            if (row, col - 1) in pipe_border:
+            #print(row, col)
+            if (row, col) in pipe_border and (row, col -1) not in pipe_border and (row, col + 1) not in pipe_border:
                 is_in = not is_in
                 print("toggled in", is_in, row, col)
-            elif (row, col - 1) not in pipe_border:
-                is_in = not is_in
-                print("toggled in", is_in, row, col)
-        
-            if is_in:
-                tiles_in_loop += 1
-                print(is_in, (row, col), tiles_in_loop)
+            else:
+                if is_in:
+                    tiles_in_loop += 1
+                    print(is_in, (row, col), tiles_in_loop)
         is_in = False
-            
-    print(pipe_border, len(pipe_border))    
+             
     print("PART 1:", pipe_cnt/2)
     print("PART 2:", tiles_in_loop)
-    print((len(lines), len(lines[0]) - 1))
